@@ -1,0 +1,14 @@
+{
+  "name": "gold-bar-weight-comparator",
+  "version": "0.0.1",
+  "description": "SDET Challenge",
+  "author": "Manuel Gama (mgamamsc@gmail.com)",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "test": "npx playwright test --headed",
+    "test-headless": "npx playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.46"
+  }
+}
