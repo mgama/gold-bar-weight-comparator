@@ -20,8 +20,6 @@ test.describe('Solve Gold Bar Weight Challenge', () => {
             arrayOfSameWeightGoldBars.push(0);
             arrayOfSameWeightGoldBars.push(1);
         }
-        console.log('The current arrayOfSameWeightGoldBars is ' + arrayOfSameWeightGoldBars);
-
     });
 
 });
