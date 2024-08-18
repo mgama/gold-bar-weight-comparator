@@ -29,4 +29,20 @@ export class WeightChallengePage {
     get lastWeighingsGeneralResult() {
         return cy.get('.game-info > ol > li').last();
   }
+
+  get listOfWeighingsResults() {
+    return cy.get('.game-info > ol > li');
+  }
+
+    foundEqualWeightResult(currentWeightMeasureText) {
+        return currentWeightMeasureText.includes('=');
+    }
+
+    foundGreaterThanWeightResult(currentWeightMeasureText) {
+        return currentWeightMeasureText.includes('>');
+    }
+
+    foundLessThanWeightResult(currentWeightMeasureText) {
+        return currentWeightMeasureText.includes('>');
+    }
 }
