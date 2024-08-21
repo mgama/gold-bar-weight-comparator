@@ -9,14 +9,38 @@ You can only place gold bars on scale plates (bowls) and find which scale weighs
 
 Solution
 Main test framework to use for solving the challenge is Playwright
+- NOTE: Cypress was also used, but it turned out to be more challenging to use for retrieving textcontent value. The test and page objects for the Cypress solution are incomplete
 
-To install:
-- Clone the repository
-- npm install
-- npx playwright install
+Main Test:
+tests/FinalSolutionSolveGoldBarChallengeTest.spec.ts
+
+Main Page Object:
+src/pageObjects/GoldBarWeightChallengePage.ts
+
+To install Playwright:
+- Clone this repository
+- Run: npm install
+- Run: npx playwright install
 
 To execute the tests thru the terminal headed (with browser UI)
 - npm run test
 
 To execute the tests headless (without browser UI)
 - npm run test-headless
+
+To execute the tests using the Playwright UI
+- npm run open-playwright-ui
+
+To see the latest test report
+- npm run show-test-report
+
+Example output on terminal when a test finishes and the Fake Gold bar is found:
+
+The final fakebar found was 4
+The weighings performed during this test run were: 
+[0] = [1]
+[0,1] = [2,3]
+[0,1,2,3] > [4,5,6,7]
+[0,1,2] > [4,5,6]
+[0,1] > [4,5]
+[0] > [4]

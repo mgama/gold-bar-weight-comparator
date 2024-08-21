@@ -5,8 +5,10 @@
   "author": "Manuel Gama (mgamamsc@gmail.com)",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
-    "playwright test": "npx playwright test --headed",
-    "playwright test-headless": "npx playwright test",
+    "test": "npx playwright test --headed",
+    "test-headless": "npx playwright test",
+    "open-playwright-ui": "npx playwright test --ui",
+    "show-test-report": "npx playwright show-report",
     "cy:open": "npx cypress open"
   },
   "devDependencies": {

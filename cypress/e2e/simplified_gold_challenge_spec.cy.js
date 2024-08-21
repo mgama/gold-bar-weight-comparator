@@ -15,9 +15,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
     weightChallengePage.listOfWeighingsResults.should('not.exist'); //Verify no weights have been measured yet
     
     //First iteration
-    weightChallengePage.getLeftBowlSquare('0').type('0');
-    weightChallengePage.getRightBowlSquare('0').type('1');
-    weightChallengePage.weightButton.click();
+    weightChallengePage.compareSingleLeftValueAndSingleRightValue(0,1);
 
     //Make first Decision on weight value
     weightChallengePage.listOfWeighingsResults.eq(0).should('exist'); //Wait for first weight measure
@@ -38,10 +36,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
         cy.log('The fakeGoldBar is ' + fakeGoldBar);
 
         //Proceed to compare 0 and 2; if equal, then 1 is the fakegoldbar
-        weightChallengePage.resetButton.click();
-        weightChallengePage.getLeftBowlSquare('0').type('0');
-        weightChallengePage.getRightBowlSquare('0').type('2');
-        weightChallengePage.weightButton.click();
+        weightChallengePage.compareSingleLeftValueAndSingleRightValue(0,2);
         weightChallengePage.listOfWeighingsResults.eq(1).should('exist'); //Wait for second weight measure
         weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
         cy.get('@currentWeightMeasure').then((text) => {
@@ -63,13 +58,9 @@ describe('Solve Gold Bar Weight Challenge', () => {
         cy.log('The fakeGoldBar is ' + fakeGoldBar + ' and the baseGoldBar is ' + baseGoldBar);
 
         ///Proceed to compare 0 and 2; if 0 is less than 2, then it is the fake bar
-        weightChallengePage.resetButton.click();
-        weightChallengePage.getLeftBowlSquare('0').type('0');
-        weightChallengePage.getRightBowlSquare('0').type('2');
-        weightChallengePage.weightButton.click();
+        weightChallengePage.compareSingleLeftValueAndSingleRightValue(0,2);
         weightChallengePage.listOfWeighingsResults.eq(1).should('exist'); //Wait for second weight measure
         weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
-
         cy.get('@currentWeightMeasure').then((text) => {
           if(weightChallengePage.foundLessThanWeightResult(text) == true) {
             foundFinalFakeBar = true;
@@ -83,16 +74,9 @@ describe('Solve Gold Bar Weight Challenge', () => {
       }
 
       //Second Iteration
-      //Reset values of bowls
-      weightChallengePage.resetButton.click();
-
-      if(foundEqualWeight == true) {
+      if(foundEqualWeight == true && finishLogic == false) {
         cy.log('foundEqualWeight for second iteration start');
-        weightChallengePage.getLeftBowlSquare('0').type('0');
-        weightChallengePage.getLeftBowlSquare('1').type('1');
-        weightChallengePage.getRightBowlSquare('0').type('2');
-        weightChallengePage.getRightBowlSquare('1').type('3');
-        weightChallengePage.weightButton.click();
+        weightChallengePage.compareDoubleLeftValueAndDoubleRightValue([0,1],[2,3]);
         cy.log('Waiting for Second Iteration Weight');
         weightChallengePage.listOfWeighingsResults.eq(1).should('exist'); //Wait for second weight measure
         weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
@@ -114,10 +98,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
             cy.log('The possibleFakeBars are ' + possibleFakeBars);
 
             //Find faker bar from 2 possible fakebars
-            weightChallengePage.resetButton.click(); 
-            weightChallengePage.getLeftBowlSquare('0').type(0);
-            weightChallengePage.getRightBowlSquare('0').type(2);
-            weightChallengePage.weightButton.click();
+            weightChallengePage.compareSingleLeftValueAndSingleRightValue(0,2);
             weightChallengePage.listOfWeighingsResults.eq(2).should('exist'); //Wait for third weight measure
             weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
 
@@ -134,6 +115,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
 
               if(weightChallengePage.foundGreaterThanWeightResult(text) == true) {
                 cy.log('Found bar 0 greater than 2, the fakebar should be 2');
+                foundEqualWeight = false;
                 foundFinalFakeBar = true;
                 fakeGoldBar = 2;
                 weightChallengePage.getCoinNumber(fakeGoldBar).click();
@@ -153,14 +135,8 @@ describe('Solve Gold Bar Weight Challenge', () => {
 
           //Third Iteration
           if(foundEqualWeight == true) { //So far here, 0,1,2,3 are equal. Need to analyze 4,5,6,7,8
-            //Reset values of bowls
-            weightChallengePage.resetButton.click();
             cy.log('foundEqualWeight for third iteration start');
-            weightChallengePage.getLeftBowlSquare('0').type('2');
-            weightChallengePage.getLeftBowlSquare('1').type('3');
-            weightChallengePage.getRightBowlSquare('0').type('4');
-            weightChallengePage.getRightBowlSquare('1').type('5');
-            weightChallengePage.weightButton.click();
+            weightChallengePage.compareDoubleLeftValueAndDoubleRightValue([2,3],[4,5]);
             cy.log('Waiting for Third Iteration Weight');
             weightChallengePage.listOfWeighingsResults.eq(2).should('exist'); //Wait for third weight measure
             weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
@@ -173,12 +149,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
                 foundEqualWeight = true;
 
                 //Move to Fourth Weight Measure //So far, 0,1,2,3,4,5 are equal. Need to analyze 6,7,8
-                weightChallengePage.resetButton.click(); 
-                weightChallengePage.getLeftBowlSquare('0').type(4);
-                weightChallengePage.getLeftBowlSquare('1').type(5);
-                weightChallengePage.getRightBowlSquare('0').type(6);
-                weightChallengePage.getRightBowlSquare('1').type(7);
-                weightChallengePage.weightButton.click();
+                weightChallengePage.compareDoubleLeftValueAndDoubleRightValue([4,5],[6,7]);
                 weightChallengePage.listOfWeighingsResults.eq(3).should('exist'); //Wait for fourth weight measure
                 weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
 
@@ -199,10 +170,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
                     possibleFakeBars.push(6);
                     possibleFakeBars.push(7);
                     // Compare 4 to 6. If equal, then the fake bar is 7
-                    weightChallengePage.resetButton.click(); 
-                    weightChallengePage.getLeftBowlSquare('0').type(4);
-                    weightChallengePage.getRightBowlSquare('0').type(6);
-                    weightChallengePage.weightButton.click();
+                    weightChallengePage.compareSingleLeftValueAndSingleRightValue(4,6);
                     weightChallengePage.listOfWeighingsResults.eq(4).should('exist'); //Wait for fifth weight measure
                     weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
 
@@ -241,10 +209,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
                 cy.log('The possibleFakeBars are ' + possibleFakeBars);
 
                 //Find faker bar from 2 possible fakebars
-                weightChallengePage.resetButton.click(); 
-                weightChallengePage.getLeftBowlSquare('0').type(0);
-                weightChallengePage.getRightBowlSquare('0').type(4);
-                weightChallengePage.weightButton.click();
+                weightChallengePage.compareSingleLeftValueAndSingleRightValue(0,4);
                 weightChallengePage.listOfWeighingsResults.eq(3).should('exist'); //Wait for fifth weight measure
                 weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
 
@@ -280,14 +245,8 @@ describe('Solve Gold Bar Weight Challenge', () => {
 
               //Fourth Iteration
               if(foundEqualWeight == true) { //So far here, 0,1,2,3,4,5 are equal. Need to analyze 6,7,8
-                //Reset values of bowls
-                weightChallengePage.resetButton.click();
                 cy.log('foundEqualWeight for fourth iteration start, So far here, 0,1,2,3,4,5 are equal. Need to analyze 6,7,8');
-                weightChallengePage.getLeftBowlSquare('0').type('4');
-                weightChallengePage.getLeftBowlSquare('1').type('5');
-                weightChallengePage.getRightBowlSquare('0').type('6');
-                weightChallengePage.getRightBowlSquare('1').type('7');
-                weightChallengePage.weightButton.click();
+                weightChallengePage.compareDoubleLeftValueAndDoubleRightValue([4,5],[6,7]);
                 cy.log('Waiting for Fourth Iteration Weight');
                 weightChallengePage.listOfWeighingsResults.eq(3).should('exist'); //Wait for fourth weight measure
                 weightChallengePage.lastWeighingsGeneralResult.invoke('text').as('currentWeightMeasure');
@@ -330,7 +289,7 @@ describe('Solve Gold Bar Weight Challenge', () => {
           }
         });
       } else {
-
+        cy.log('More logic to do');
       }
 
     });

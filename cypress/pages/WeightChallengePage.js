@@ -43,6 +43,40 @@ export class WeightChallengePage {
     }
 
     foundLessThanWeightResult(currentWeightMeasureText) {
-        return currentWeightMeasureText.includes('>');
+        return currentWeightMeasureText.includes('<');
+    }
+
+    assertAlertMessage(alertMessageToAssert) {
+    cy.on('window:alert', (str) => {
+        expect(str).to.equal(alertMessageToAssert)
+      })
+    }
+
+    compareSingleLeftValueAndSingleRightValue(leftValue, rightValue) {
+        this.resetButton.click();
+        //Wait for Bowls to be cleaned up
+        this.getLeftBowlSquare(0).invoke('text').should('eq', '');
+        this.getLeftBowlSquare(1).invoke('text').should('eq', '');
+        this.getRightBowlSquare(0).invoke('text').should('eq', '');
+        this.getRightBowlSquare(1).invoke('text').should('eq', '');
+        //Enter values on bowls
+        this.getLeftBowlSquare(0).type(leftValue);
+        this.getRightBowlSquare(0).type(rightValue);
+        this.weightButton.click();
+    }
+
+    compareDoubleLeftValueAndDoubleRightValue(leftValues, rightValues){
+        this.resetButton.click();
+        //Wait for Bowls to be cleaned up
+        this.getLeftBowlSquare(0).invoke('text').should('eq', '');
+        this.getLeftBowlSquare(1).invoke('text').should('eq', '');
+        this.getRightBowlSquare(0).invoke('text').should('eq', '');
+        this.getRightBowlSquare(1).invoke('text').should('eq', '');
+        //Enter values on bowls
+        this.getLeftBowlSquare(0).type(leftValues[0]);
+        this.getLeftBowlSquare(1).type(leftValues[1]);
+        this.getRightBowlSquare(0).type(rightValues[0]);
+        this.getRightBowlSquare(1).type(rightValues[1]);
+        this.weightButton.click();
     }
 }
